@@ -332,6 +332,10 @@ public class ExecutionImpl extends PvmExecutionImpl implements
     // do nothing
   }
 
+  public void fireHistoricActivityInstanceEnd() {
+    // do nothing
+  }
+
   protected void removeVariablesLocalInternal(){
     // do nothing
   }

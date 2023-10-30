@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineServices;
@@ -355,19 +356,26 @@ public class ExecutionEntity extends PvmExecutionImpl implements Execution, Proc
 
   // helper ///////////////////////////////////////////////////////////////////
 
-  public void fireHistoricActivityInstanceUpdate() {
+  protected void extracted(HistoryEventTypes historyEventType, Function<HistoryEventProducer, HistoryEvent> createHistoryEventFunction) {
     ProcessEngineConfigurationImpl configuration = Context.getProcessEngineConfiguration();
     HistoryLevel historyLevel = configuration.getHistoryLevel();
-    if (historyLevel.isHistoryEventProduced(HistoryEventTypes.ACTIVITY_INSTANCE_UPDATE, this)) {
-      // publish update event for current activity instance (containing the id
-      // of the sub process/case)
+    if (historyLevel.isHistoryEventProduced(historyEventType, this)) {
+      // publish event for current activity instance (containing the id of the sub process/case)
       HistoryEventProcessor.processHistoryEvents(new HistoryEventProcessor.HistoryEventCreator() {
         @Override
         public HistoryEvent createHistoryEvent(HistoryEventProducer producer) {
-          return producer.createActivityInstanceUpdateEvt(ExecutionEntity.this);
+          return createHistoryEventFunction.apply(producer);
         }
       });
     }
+  }
+
+  public void fireHistoricActivityInstanceUpdate() {
+    extracted(HistoryEventTypes.ACTIVITY_INSTANCE_UPDATE, producer -> producer.createActivityInstanceUpdateEvt(ExecutionEntity.this));
+  }
+
+  public void fireHistoricActivityInstanceEnd() {
+    extracted(HistoryEventTypes.ACTIVITY_INSTANCE_END, producer -> producer.createActivityInstanceEndEvt(ExecutionEntity.this));
   }
 
   // scopes ///////////////////////////////////////////////////////////////////

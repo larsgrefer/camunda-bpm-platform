@@ -314,6 +314,8 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
 
   public abstract void fireHistoricProcessStartEvent();
 
+  public abstract void fireHistoricActivityInstanceEnd();
+
   @Override
   public void destroy() {
     destroy(false);
@@ -592,6 +594,10 @@ public abstract class PvmExecutionImpl extends CoreExecution implements
           // child execution is active
           if (!isActive() && lastConcurrent.isActive()) {
             setActive(true);
+          }
+
+          if (lastConcurrent.getActivity() != null) {
+            lastConcurrent.fireHistoricActivityInstanceEnd();
           }
 
           lastConcurrent.remove();
