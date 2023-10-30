@@ -1801,7 +1801,7 @@ public class BatchSetRemovalTimeInChunksTest {
     authorization.setResource(Resources.HISTORIC_PROCESS_INSTANCE);
 
     String processInstanceId = historyService.createHistoricProcessInstanceQuery()
-        .activeActivityIdIn("userTask")
+        .superProcessInstanceId(rootProcessInstanceId)
         .singleResult()
         .getId();
 
@@ -1856,7 +1856,7 @@ public class BatchSetRemovalTimeInChunksTest {
     authorization.setResource(Resources.HISTORIC_PROCESS_INSTANCE);
 
     String processInstanceId = historyService.createHistoricProcessInstanceQuery()
-        .activeActivityIdIn("userTask")
+        .superProcessInstanceId(rootProcessInstanceId)
         .singleResult()
         .getId();
 

@@ -358,8 +358,8 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     HistoricActivityStatistics task = statistics.get(8);
 
     assertEquals("task", task.getId());
-    assertEquals(5, task.getInstances());
-    assertEquals(0, task.getFinished());
+    assertEquals(0, task.getInstances());
+    assertEquals(5, task.getFinished());
 
     completeProcessInstances();
   }
@@ -451,8 +451,8 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
 
     List<HistoricActivityStatistics> statistics = query.list();
 
-    assertEquals(4, query.count());
-    assertEquals(4, statistics.size());
+    assertEquals(3, query.count());
+    assertEquals(3, statistics.size());
 
     // end1
     HistoricActivityStatistics end1 = statistics.get(0);
@@ -474,13 +474,6 @@ public class HistoricActivityStatisticsQueryTest extends PluggableProcessEngineT
     assertEquals("subprocess", subprocess.getId());
     assertEquals(0, subprocess.getInstances());
     assertEquals(25, subprocess.getCompleteScope());
-
-    // task
-    HistoricActivityStatistics task = statistics.get(3);
-
-    assertEquals("task", task.getId());
-    assertEquals(5, task.getInstances());
-    assertEquals(0, task.getCompleteScope());
 
     completeProcessInstances();
   }
